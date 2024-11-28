@@ -1,0 +1,23 @@
+package helloworld
+
+import (
+	"net/http"
+
+	"github.com/GoogleCloudPlatform/functions-framework-go/functions"
+	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/adaptor"
+	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/username/repository/middleware"
+	"github.com/username/repository/routes"
+)
+
+func init() {
+	functions.HTTP("HelloHTTP", helloHTTP)
+}
+
+func helloHTTP(w http.ResponseWriter, r *http.Request) {
+	app := fiber.New()
+	app.Use(cors.New(middleware.CorsAllowAll))
+	routes.ContohRoute(app)
+	adaptor.FiberApp(app)(w, r)
+}
